@@ -48,6 +48,15 @@ pip install -r requirements.txt
 |Fine-tuned on Text-guided Molecule Generation (ChEBI-20)|[link](https://huggingface.co/datasets/QizhiPei/e3fp-chebi-molgen)|[link](https://huggingface.co/QizhiPei/3d-molt5-base-chebi-molgen)|`ft_chebi_molgen.sh`|`eval_chebi_molgen.sh`|
 |Fine-tuned on Retrosynthesis (USPTO-50k)|[link](https://huggingface.co/datasets/QizhiPei/e3fp-uspto-50k)|[link](https://huggingface.co/QizhiPei/3d-molt5-base-uspto-retro)|`ft_uspto.sh`|`eval_uspto.sh`|
 
+## Data Processing
+All datasets used in fine-tuning are provided in [HuggingFace](https://huggingface.co/collections/QizhiPei/3d-molt5-68b561939178c4b5a349b45f) as shown in the table above.
+
+We also provide the code for data processing in `3d_tokenization`, which is used to tokenize the 3D molecular structures (`.sdf` file) into a unified format.
+
+```bash
+cd 3d_tokenization
+python 3d_tokenize.py
+```
 
 ## Fine-tuning
 Please refer to the scripts in `3d_molt5/finetune_scripts` for how to fine-tune the model.
@@ -58,9 +67,6 @@ You can change the `n_gpu` and `CUDA_VISIBLE_DEVICES` as needed.
 Please refer to the scripts in `3d_molt5/eval_scripts` for how to evaluate the model.
 The corresponding script name is shown in the table above.
 We only test the evaluation code with a single gpu.
-
-## TODO
-- [ ] [Code] Data processing - E3FP tokenization
 
 ## Acknowledgments
 We thank the authors of [nanoT5](https://github.com/PiotrNawrot/nanoT5) and [E3FP](https://github.com/keiserlab/e3fp) for their excellent works.
