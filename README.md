@@ -63,7 +63,7 @@ We only test the evaluation code with a single gpu.
 - [ ] [Code] Data processing - E3FP tokenization
 
 ## Acknowledgments
-We thank the authors of [nanoT5](https://github.com/PiotrNawrot/nanoT5) and[E3FP](https://github.com/keiserlab/e3fp) for their excellent works.
+We thank the authors of [nanoT5](https://github.com/PiotrNawrot/nanoT5) and [E3FP](https://github.com/keiserlab/e3fp) for their excellent works.
 
 ## Citations
 ```
