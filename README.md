@@ -59,6 +59,12 @@ Please refer to the scripts in `3d_molt5/eval_scripts` for how to evaluate the m
 The corresponding script name is shown in the table above.
 We only test the evaluation code with a single gpu.
 
+## TODO
+- [ ] [Code] Data processing - E3FP tokenization
+
+## Acknowledgments
+We thank the authors of [nanoT5](https://github.com/PiotrNawrot/nanoT5) and[E3FP](https://github.com/keiserlab/e3fp) for their excellent works.
+
 ## Citations
 ```
 @inproceedings{pei3d,
