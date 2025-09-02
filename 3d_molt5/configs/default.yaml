@@ -1,0 +1,102 @@
+defaults:
+  - _self_
+  - task: pt
+
+# Experiment args
+mode: 'pt'
+device: gpu
+eval_only: false
+predict_only: false
+generate_only: false
+generate_file: '~/tmp.tsv'
+seed: 2137
+
+model:
+  name: 'google/t5-v1_1-base'
+  checkpoint_path: ''
+  dropout: 0.0
+  random_init: true
+  compile: false # Pytorch 2.0
+
+data:
+  input_length: 512
+  mlm_probability: 0.15
+  mean_noise_span_length: 3.0
+  num_workers: 8
+
+optim:
+  name: adamwscale
+  base_lr: 2e-2
+  batch_size: 144
+  total_steps: 65536
+  epochs: -1 # If it's > 0 it overwrites total_steps
+  warmup_steps: 10000
+  lr_scheduler: cosine
+  weight_decay: 0.0
+  grad_clip: 1.0
+  grad_acc: 2
+  final_cosine: 1e-5
+
+eval:
+  every_steps: 5000
+  steps: 10000000
+
+pred:
+  every_steps: 10000000
+  every_epochs: 0
+
+checkpoint:
+  every_steps: 5000
+  every_epochs: 0
+
+logging:
+  wandb: false
+  wandb_project: '3d_molt5'
+  wandb_group: 'pt'
+  wandb_run_name: 'pt'
+  neptune: false
+  neptune_creds:
+    project:
+    api_token:
+    tags:
+  every_steps: 100
+  grad_l2: true
+  weights_l2: true
+
+hydra:
+  job:
+    chdir: True
+  run:
+    dir: ./logs/${now:%Y-%m-%d}/debug_${now:%H-%M-%S}
+
+molecule_dict: dict/selfies_dict.txt
+pair_data_dir: your_data_dir
+molecule_1d_data_dir: your_data_dir
+molecule_3d_data_dir: your_data_dir
+pubmed_data_dir: your_data_dir
+incontext_pubmed_data_dir: your_data_dir
+
+fp_bits: 4096
+fp_level: 3
+no_fp: False
+
+run_test: True
+run_validation: True
+
+debug: False
+finetune_from_biot5: ''
+
+generation_config:
+  do_sample: false
+  num_beams: 1
+  temperature: 1.0
+  top_k: 50
+  top_p: 1.0
+  repetition_penalty: 1.0
+  max_new_tokens: ''
+
+restore_train: False
+restore_train_path: 
+
+ft_setting: specialist
+emb_setting: sum

@@ -1,0 +1,42 @@
+# @package _global_
+
+mode: 'ft'
+
+data:
+  max_seq_len: 256
+  max_target_len: 256
+  data_dir: data/3d_molt5
+
+optim:
+  name: adamw
+  base_lr: 1e-3
+  batch_size: 128
+  epochs: -1
+  total_steps: 50000
+  warmup_steps: 1000
+  lr_scheduler: cosine
+  weight_decay: 0.0
+  grad_clip: 0.0
+  grad_acc: 8
+  test_bsz_multi: 1
+
+eval:
+  every_steps: 1000
+  steps: 100000 # whole test set
+
+pred:
+  every_steps: 1000
+
+checkpoint:
+  every_steps: 2000
+
+hydra:
+  job:
+    chdir: True
+  run:
+    dir: ./logs/finetune_mol2text_local
+
+test_task: chebi_cap
+result_fn: test_chebi_cap_pred.tsv
+
+inst_format: False
