@@ -124,7 +124,7 @@ def load_dataset_splits(args):
                 dataset_splits = dataset_splits.map(mol_text_process, num_proc=8)
                 col_remove = ['cid', 'task', 'coord_norm', 'smiles', 'output', 'enriched_output', 'selfies']
 
-            elif args.test_task in ['pqc_prop', 'pubchem_com', 'pubchem_des', 'chebi_cap', 'molnet_cls', 'molnet_reg', 'molinst_qm9', 'lm24_cap']:
+            elif args.test_task in ['pqc_prop', 'pubchem_com', 'pubchem_des', 'chebi_cap', 'molnet_cls', 'molnet_reg', 'molinst_qm9']:
                 def mol_text_process(example):
                     example_fp = np.array(example['molecule_fp'])
                     pend_fp = np.full((1, example_fp.shape[-1]), -1)
@@ -135,24 +135,20 @@ def load_dataset_splits(args):
                     col_remove = ['idx_3d', 'task', 'smiles', 'output', 'selfies']
                 elif args.test_task == 'chebi_cap':
                     col_remove = ['cid', 'smiles', 'output', 'selfies']
-                elif args.test_task == 'lm24_cap':
-                    col_remove = ['smiles', 'output', 'selfies']
                 elif args.test_task in ['molnet_cls', 'molnet_reg', 'molinst_qm9']:
                     col_remove = ['smiles', 'output', 'selfies']
                 else: # pubchem_com and pubchem_des
                     col_remove = ['cid', 'task', 'coord_norm', 'smiles', 'output', 'selfies']
-            elif args.test_task in ['chebi_molgen', 'lm24_molgen']:
+            elif args.test_task == 'chebi_molgen':
                 def mol_text_process(example): # use chebi caption, reverse the src and tgt
                     example_fp = np.array(example['molecule_fp'])
                     pend_fp = np.full((1, example_fp.shape[-1]), -1)
-                    return {'tgt': '<bom>' + example['selfies'] + '<eom>.', 'src': example['output'].strip(), 'molecule_fp': np.concatenate([pend_fp, example_fp, pend_fp], axis=0), 
-                            'instruction': 'Generate a molecule that fits the input description.'}
+                    return {'tgt': '<bom>' + example['selfies'] + '<eom>.', 'src': example['input'].strip(), 'molecule_fp': np.concatenate([pend_fp, example_fp, pend_fp], axis=0)}
                 
                 dataset_splits = dataset_splits.map(mol_text_process, num_proc=8)
-                if args.test_task == 'chebi_molgen':
-                    col_remove = ['cid', 'smiles', 'output', 'selfies']
-                elif args.test_task == 'lm24_molgen':
-                    col_remove = ['smiles', 'output', 'selfies']
+                
+                col_remove = ['cid', 'smiles', 'output', 'selfies']
+
             elif args.test_task == 'molinst_react':
                 def mol_text_process(example): # use chebi caption, reverse the src and tgt
                     example_fp = np.array(example['molecule_fp'])
@@ -413,7 +409,7 @@ def process_dataset_ft(dataset_splits, args, tokenizer):
     final_datasets = {}
 
     for split, dataset_split in dataset_splits.items():
-        if args.test_task in ['chebi_molgen', 'lm24_molgen', 'molinst_react', 'uspto']:
+        if args.test_task in ['chebi_molgen', 'molinst_react', 'uspto']:
             tokenize_function_i = tokenize_function_ft_no_fp
         else:
             tokenize_function_i = tokenize_function_ft
